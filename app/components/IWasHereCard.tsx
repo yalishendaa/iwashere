@@ -114,7 +114,7 @@ export function IWasHereCard() {
                 : 'Connect to continue'}
             </p>
             {/* Prefer Farcaster connector inside Mini App */}
-            {connectors
+            {[...connectors]
               .sort((a, b) => (a.name.includes('Farcaster') ? -1 : b.name.includes('Farcaster') ? 1 : 0))
               .map((connector) => (
                 <button

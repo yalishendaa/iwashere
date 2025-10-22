@@ -1,9 +1,13 @@
 'use client';
 
-import { ConnectButton } from '@coinbase/onchainkit';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { useContract } from '@/hooks/useContract';
 
 export function IWasHereCard() {
+  const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { disconnect } = useDisconnect();
+  
   const {
     stopped,
     stopTime,
@@ -35,7 +39,32 @@ export function IWasHereCard() {
 
       {/* Connect Wallet */}
       <div className="flex justify-center">
-        <ConnectButton />
+        {isConnected ? (
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">
+              Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
+            </p>
+            <button
+              onClick={() => disconnect()}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+              Disconnect
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">Connect your wallet to continue</p>
+            {connectors.map((connector) => (
+              <button
+                key={connector.uid}
+                onClick={() => connect({ connector })}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Connect {connector.name}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Global Status */}
@@ -112,7 +141,7 @@ export function IWasHereCard() {
       {isSuccess && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-3">
           <p className="text-green-600 text-sm">
-            Transaction confirmed! You've pressed the button.
+            Transaction confirmed! You&apos;ve pressed the button.
           </p>
         </div>
       )}

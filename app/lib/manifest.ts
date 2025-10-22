@@ -6,14 +6,14 @@ const revalidateSeconds = 60;
 export const manifestRevalidate = revalidateSeconds;
 
 export function buildManifest() {
-  const headerList = headers();
-  const forwardedProto = headerList.get('x-forwarded-proto');
+  const headerList = typeof headers === 'function' ? headers() : null;
+  const forwardedProto = headerList?.get('x-forwarded-proto');
   const proto =
     forwardedProto && forwardedProto.includes('https')
       ? 'https'
       : forwardedProto ?? 'https';
   const host =
-    headerList.get('x-forwarded-host') ?? headerList.get('host') ?? '';
+    headerList?.get('x-forwarded-host') ?? headerList?.get('host') ?? '';
 
   const rootUrl =
     process.env.NEXT_PUBLIC_URL || minikitConfig.miniapp.homeUrl || '';

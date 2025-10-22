@@ -1,19 +1,19 @@
-import { headers } from 'next/headers';
 import { minikitConfig } from '../../minikit.config';
 
-const revalidateSeconds = 60;
+export const MANIFEST_REVALIDATE_SECONDS = 60;
 
-export const manifestRevalidate = revalidateSeconds;
+type HeaderLike = {
+  get(name: string): string | null | undefined;
+};
 
-export function buildManifest() {
-  const headerList = typeof headers === 'function' ? headers() : null;
-  const forwardedProto = headerList?.get('x-forwarded-proto');
+export function buildManifest(headers?: HeaderLike) {
+  const forwardedProto = headers?.get('x-forwarded-proto');
   const proto =
     forwardedProto && forwardedProto.includes('https')
       ? 'https'
       : forwardedProto ?? 'https';
   const host =
-    headerList?.get('x-forwarded-host') ?? headerList?.get('host') ?? '';
+    headers?.get('x-forwarded-host') ?? headers?.get('host') ?? '';
 
   const rootUrl =
     process.env.NEXT_PUBLIC_URL || minikitConfig.miniapp.homeUrl || '';

@@ -1,14 +1,14 @@
-import { NextResponse } from 'next/server';
-import { buildManifest, manifestRevalidate } from '../../lib/manifest';
+import { NextRequest, NextResponse } from 'next/server';
+import { MANIFEST_REVALIDATE_SECONDS, buildManifest } from '../../lib/manifest';
 
-export function GET() {
-  const response = NextResponse.json(buildManifest());
+export function GET(request: NextRequest) {
+  const response = NextResponse.json(buildManifest(request.headers));
   response.headers.set(
     'Cache-Control',
-    `public, max-age=${manifestRevalidate}`
+    `public, max-age=${MANIFEST_REVALIDATE_SECONDS}`
   );
   return response;
 }
 
-export const revalidate = manifestRevalidate;
+export const revalidate = MANIFEST_REVALIDATE_SECONDS;
 export const dynamic = 'force-dynamic';

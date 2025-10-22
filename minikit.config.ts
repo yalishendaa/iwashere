@@ -1,6 +1,18 @@
-const ROOT_URL =
-  process.env.NEXT_PUBLIC_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000');
+const getRootUrl = () => {
+  const explicit = process.env.NEXT_PUBLIC_URL;
+  if (explicit) return explicit;
+
+  const deployment =
+    process.env.VERCEL_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL;
+
+  if (deployment) {
+    return deployment.startsWith('http') ? deployment : `https://${deployment}`;
+  }
+
+  return 'http://localhost:3000';
+};
+
+const ROOT_URL = getRootUrl();
 
 /**
  * MiniApp configuration object. Must follow the Farcaster MiniApp specification.
@@ -9,9 +21,9 @@ const ROOT_URL =
  */
 export const minikitConfig = {
   accountAssociation: {
-    header: "",
-    payload: "",
-    signature: ""
+    "header": "eyJmaWQiOjQyMTU2MCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDVERjk2RjUwMTc5OTk4QzhEODE1MTA4OEI4NEI1ZmZDOWQ0NDY3MjgifQ",
+    "payload": "eyJkb21haW4iOiJpd2FzaGVyZWFwcC15YmJqLnZlcmNlbC5hcHAifQ",
+    "signature": "rNW/ddr+6VkgOF/QzON3d6+kGSEviZuUskb/H7iUK00lP+90BkrIYtjzh9kJcs9r7ggcy0vLEr0KHu0y69qZRxw="
   },
   miniapp: {
     version: "1",

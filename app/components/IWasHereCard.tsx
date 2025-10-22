@@ -53,16 +53,19 @@ export function IWasHereCard() {
           </div>
         ) : (
           <div className="space-y-2">
-            <p className="text-sm text-gray-600">Connect your wallet to continue</p>
-            {connectors.map((connector) => (
-              <button
-                key={connector.uid}
-                onClick={() => connect({ connector })}
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Connect {connector.name}
-              </button>
-            ))}
+            <p className="text-sm text-gray-600">Connect to continue</p>
+            {/* Prefer Farcaster connector inside Mini App */}
+            {connectors
+              .sort((a, b) => (a.name.includes('Farcaster') ? -1 : b.name.includes('Farcaster') ? 1 : 0))
+              .map((connector) => (
+                <button
+                  key={connector.uid}
+                  onClick={() => connect({ connector })}
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Connect {connector.name}
+                </button>
+              ))}
           </div>
         )}
       </div>

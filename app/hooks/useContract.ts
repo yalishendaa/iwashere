@@ -43,9 +43,9 @@ export function useContract() {
   });
 
   // Parse user status
-  const userCount = userStatus?.[0] || 0n;
-  const userLastPress = userStatus?.[1] || 0n;
-  const userNextAvailable = userStatus?.[2] || 0n;
+  const userCount = userStatus?.[0] || BigInt(0);
+  const userLastPress = userStatus?.[1] || BigInt(0);
+  const userNextAvailable = userStatus?.[2] || BigInt(0);
 
   // Time remaining hook
   const { timeRemaining, formatted: timeFormatted } = useTimeRemaining(

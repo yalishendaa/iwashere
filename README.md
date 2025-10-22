@@ -80,6 +80,7 @@ Go to [base.dev/preview](https://base.dev/preview) to validate your app:
 1. Add your app URL to view embeds
 2. Use "Account association" tab to verify credentials
 3. Use "Metadata" tab to check manifest fields
+4. Confirm `/.well-known/farcaster.json` returns your live manifest
 
 ### 8. Publish to Base App
 
@@ -134,6 +135,7 @@ iwashere/
 ## Base Mini App Features
 
 - ✅ Farcaster manifest integration
+- ✅ Farcaster QuickAuth sign-in
 - ✅ Account association with Base
 - ✅ OnchainKit wallet connection
 - ✅ Smart contract integration

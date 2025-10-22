@@ -1,4 +1,9 @@
 {
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
   "version": "1",
   "name": "IWasHere",
   "subtitle": "Press once per 24h",

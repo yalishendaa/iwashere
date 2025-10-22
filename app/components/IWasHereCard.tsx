@@ -2,12 +2,21 @@
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { useContract } from '@/hooks/useContract';
+import { useFarcasterAuth } from '@/hooks/useFarcasterAuth';
 
 export function IWasHereCard() {
   const { address, isConnected } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
-  
+  const {
+    isMiniApp,
+    isAuthenticated: isFarcasterAuthenticated,
+    isLoading: isFarcasterLoading,
+    fid,
+    signIn,
+    error: farcasterError,
+  } = useFarcasterAuth();
+
   const {
     stopped,
     stopTime,
@@ -22,6 +31,10 @@ export function IWasHereCard() {
     error,
   } = useContract();
 
+  const requiresFarcasterAuth = isMiniApp;
+  const canPressWithAuth = canPress && (!requiresFarcasterAuth || isFarcasterAuthenticated);
+  const walletConnectDisabled = requiresFarcasterAuth && !isFarcasterAuthenticated;
+
   const formatTimestamp = (timestamp: number) => {
     if (timestamp === 0) return 'Never';
     return new Date(timestamp * 1000).toLocaleString();
@@ -35,6 +48,48 @@ export function IWasHereCard() {
         <p className="text-gray-600">
           Press the button once per 24 hours. Stops forever when Jesse presses.
         </p>
+      </div>
+
+      {/* Farcaster Auth */}
+      <div className="bg-purple-50 rounded-lg p-4">
+        <h2 className="text-lg font-semibold text-purple-900 mb-2">Farcaster Account</h2>
+        {isMiniApp ? (
+          isFarcasterAuthenticated ? (
+            <p className="text-sm text-purple-800">
+              Signed in as FID <span className="font-semibold">{fid}</span>
+            </p>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-sm text-purple-800">
+                Sign in with Farcaster to link your account.
+              </p>
+              <button
+                onClick={() => signIn()}
+                disabled={isFarcasterLoading}
+                className={`
+                  w-full px-4 py-2 rounded-lg font-medium transition-colors
+                  ${
+                    isFarcasterLoading
+                      ? 'bg-purple-200 text-purple-500 cursor-wait'
+                      : 'bg-purple-600 text-white hover:bg-purple-700'
+                  }
+                `}
+              >
+                {isFarcasterLoading ? 'Waiting for Farcaster...' : 'Sign in with Farcaster'}
+              </button>
+            </div>
+          )
+        ) : (
+          <p className="text-sm text-purple-800">
+            Open this Mini App inside Farcaster to sign in with your account.
+          </p>
+        )}
+
+        {farcasterError && (
+          <p className="text-xs text-red-600 mt-2">
+            {farcasterError}
+          </p>
+        )}
       </div>
 
       {/* Connect Wallet */}
@@ -53,7 +108,11 @@ export function IWasHereCard() {
           </div>
         ) : (
           <div className="space-y-2">
-            <p className="text-sm text-gray-600">Connect to continue</p>
+            <p className="text-sm text-gray-600">
+              {walletConnectDisabled
+                ? 'Sign in with Farcaster to enable wallet connections'
+                : 'Connect to continue'}
+            </p>
             {/* Prefer Farcaster connector inside Mini App */}
             {connectors
               .sort((a, b) => (a.name.includes('Farcaster') ? -1 : b.name.includes('Farcaster') ? 1 : 0))
@@ -61,7 +120,15 @@ export function IWasHereCard() {
                 <button
                   key={connector.uid}
                   onClick={() => connect({ connector })}
-                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  disabled={walletConnectDisabled}
+                  className={`
+                    w-full px-4 py-2 rounded-lg transition-colors
+                    ${
+                      walletConnectDisabled
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }
+                  `}
                 >
                   Connect {connector.name}
                 </button>
@@ -116,13 +183,18 @@ export function IWasHereCard() {
 
       {/* Action Button */}
       <div className="text-center">
+        {!isFarcasterAuthenticated && requiresFarcasterAuth && (
+          <p className="text-sm text-purple-700 mb-2">
+            Sign in with Farcaster before pressing the button.
+          </p>
+        )}
         <button
           onClick={press}
-          disabled={!canPress}
+          disabled={!canPressWithAuth}
           className={`
             w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-200
             ${
-              canPress
+              canPressWithAuth
                 ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }

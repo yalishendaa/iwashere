@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { quickAuth } from '@farcaster/miniapp-sdk';
 import { decodeJwt } from '@farcaster/quick-auth/decodeJwt';
-import type { JWTPayload } from '@farcaster/quick-auth/types';
+import type { JWTPayload } from '@farcaster/quick-auth';
 
 type Session = {
   token: string;

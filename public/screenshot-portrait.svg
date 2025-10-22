@@ -1,0 +1,8 @@
+<svg width="375" height="812" viewBox="0 0 375 812" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="375" height="812" fill="#F3F4F6"/>
+  <rect x="20" y="100" width="335" height="600" rx="16" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="187.5" y="200" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#111827">I Was Here</text>
+  <text x="187.5" y="240" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#6B7280">Press once per 24h</text>
+  <rect x="50" y="400" width="275" height="50" rx="8" fill="#3B82F6"/>
+  <text x="187.5" y="430" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">I Was Here</text>
+</svg>

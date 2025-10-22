@@ -10,5 +10,5 @@ export function GET(request: NextRequest) {
   return response;
 }
 
-export const revalidate = MANIFEST_REVALIDATE_SECONDS;
+export const revalidate = 60;
 export const dynamic = 'force-dynamic';

@@ -47,7 +47,9 @@ export function useFarcasterAuth() {
       setError(null);
 
       try {
-        const { token } = await quickAuth.getToken({ force });
+        const { token } = force
+          ? await quickAuth.getToken({ force: 'true' })
+          : await quickAuth.getToken();
         const payload = decodeJwt(token);
         setSession({ token, payload });
       } catch (err) {

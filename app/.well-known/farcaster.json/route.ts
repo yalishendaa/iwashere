@@ -16,7 +16,9 @@ function createManifestForRequest() {
   const host = headerList.get('x-forwarded-host') ?? headerList.get('host') ?? '';
   const { miniapp, accountAssociation } = minikitConfig;
 
-  const baseFromConfig = resolveOrigin(minikitConfig.miniapp.homeUrl);
+  const baseFromConfig = resolveOrigin(
+    process.env.NEXT_PUBLIC_URL || minikitConfig.miniapp.homeUrl
+  );
   const base = baseFromConfig || (host ? `${proto}://${host}` : '');
 
   const absolutize = (value: string | undefined) => {

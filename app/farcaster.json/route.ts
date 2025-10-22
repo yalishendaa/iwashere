@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { buildManifest, manifestRevalidate } from '../../lib/manifest';
+import { buildManifest, manifestRevalidate } from '../lib/manifest';
 
 export const revalidate = manifestRevalidate;
 
